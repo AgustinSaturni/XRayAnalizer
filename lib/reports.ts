@@ -79,12 +79,17 @@ let reports: any[] = [
 
 // Función para obtener todos los reportes
 export async function getReports() {
-  // Simulamos una llamada a la API
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve([...reports])
-    }, 500)
-  })
+  try {
+    const response = await fetch("http://127.0.0.1:8000/reports");
+    if (!response.ok) {
+      throw new Error("Error al obtener los reportes");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error al obtener reportes:", error);
+    return [];
+  }
 }
 
 // Función para obtener reportes por ID de proyecto
