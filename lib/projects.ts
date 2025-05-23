@@ -113,23 +113,23 @@ export async function updateProject(id: string, projectData: any) {
   }
 }
 
-// Función para eliminar un proyecto
 export async function deleteProject(id: string) {
   console.log("Eliminando proyecto con ID:", id)
 
-  // Simulamos una llamada a la API
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const index = projects.findIndex((p) => p.id === id)
-      if (index !== -1) {
-        const deletedProject = projects[index]
-        projects = projects.filter((p) => p.id !== id)
-        console.log("Proyecto eliminado:", deletedProject)
-        resolve(true)
-      } else {
-        console.log("Proyecto no encontrado para eliminar con ID:", id)
-        reject(new Error("Proyecto no encontrado"))
-      }
-    }, 1000)
-  })
+  try {
+    const response = await fetch(`http://127.0.0.1:8000/projects/${id}`, {
+      method: "DELETE",
+    })
+
+    if (!response.ok) {
+      const data = await response.json()
+      throw new Error(data.detail || "Error al eliminar el proyecto")
+    }
+
+    console.log("Proyecto eliminado con éxito")
+    return true
+  } catch (error) {
+    console.error("Error al eliminar el proyecto:", error)
+    throw error
+  }
 }
