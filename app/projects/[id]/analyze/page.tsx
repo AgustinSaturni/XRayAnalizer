@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -13,7 +13,7 @@ import { getProject } from "@/lib/projects"
 import { createReport } from "@/lib/reports"
 import { SaveReportDialog } from "@/components/save-report-dialog"
 
-export default function AnalyzePage({ params }: { params: { id: string } }) {
+export default function AnalyzePage() {
   const router = useRouter()
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [isAnalyzed, setIsAnalyzed] = useState(false)
@@ -22,6 +22,7 @@ export default function AnalyzePage({ params }: { params: { id: string } }) {
   const [project, setProject] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [saveDialogOpen, setSaveDialogOpen] = useState(false)
+  const params = useParams();
 
   // Datos de ejemplo para imágenes
   const images = [
@@ -61,7 +62,8 @@ export default function AnalyzePage({ params }: { params: { id: string } }) {
   useEffect(() => {
     const loadProject = async () => {
       try {
-        const projectData = await getProject(params.id)
+        const id = params.id as string;
+        const projectData = await getProject(id)
         setProject(projectData)
       } catch (error) {
         console.error("Error al cargar el proyecto:", error)

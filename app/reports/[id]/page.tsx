@@ -3,28 +3,30 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { useRouter } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { ArrowLeft, Download, Pencil, Trash2, Loader2 } from "lucide-react"
 import { toast } from "@/components/ui/use-toast"
 import { Toaster } from "@/components/ui/toaster"
-import { getReport, updateReport } from "@/lib/reports"
+import { getReportById, updateReport } from "@/lib/reports"
 import { DeleteReportDialog } from "@/components/delete-report-dialog"
 import { EditReportDialog } from "@/components/edit-report-dialog"
 
-export default function ReportDetailPage({ params }: { params: { id: string } }) {
+export default function ReportDetailPage() {
   const router = useRouter()
   const [report, setReport] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [editDialogOpen, setEditDialogOpen] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
-
+  const params = useParams();
+  
   const loadReport = async () => {
     try {
-      const reportData = await getReport(params.id)
+      const id = params.id as string;
+      const reportData = await getReportById(id)
       setReport(reportData)
     } catch (error) {
       console.error("Error al cargar el reporte:", error)
