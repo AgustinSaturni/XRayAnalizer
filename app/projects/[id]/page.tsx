@@ -208,12 +208,31 @@ const loadProject = async () => {
                   Subir Radiografías
                 </Button>
               </Link>
-              <Link href={`/projects/${project.id}/analyze`} className="w-full">
-                <Button variant="outline" className="w-full">
-                  <BarChart3 className="mr-2 h-4 w-4" />
-                  Analizar
-                </Button>
-              </Link>
+          {project.imageCount === 0 ? (
+            <Button
+              variant="outline"
+              className="w-full opacity-50 cursor-not-allowed"
+              disabled
+            >
+              <BarChart3 className="mr-2 h-4 w-4" />
+              Analizar
+            </Button>
+          ) : (
+            <Link
+              href={`/projects/${project.id}/analyze`}
+              className="w-full"
+              passHref
+            >
+              <Button
+                variant="outline"
+                className="w-full"
+              >
+                <BarChart3 className="mr-2 h-4 w-4" />
+                Analizar
+              </Button>
+            </Link>
+          )}
+
             </CardFooter>
           </Card>
         </div>

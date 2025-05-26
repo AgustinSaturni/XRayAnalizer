@@ -170,9 +170,17 @@ export default function ProjectsPage() {
                   <Link href={`/projects/${project.id}`}>
                     <Button variant="outline">Ver Detalles</Button>
                   </Link>
-                  <Link href={`/projects/${project.id}/analyze`}>
-                    <Button>Analizar</Button>
-                  </Link>
+            {project.imageCount === 0 ? (
+              <Button disabled >
+                Analizar
+              </Button>
+            ) : (
+              <Link href={`/projects/${project.id}/analyze`} passHref>
+                <Button >
+                  Analizar
+                </Button>
+              </Link>
+            )}
                 </CardFooter>
               </Card>
             ))}
