@@ -121,18 +121,18 @@ const loadProject = async () => {
     loadProject()
   }
 
-const handleDeleteImage = async (image: any) => {
-  try {
-    await deleteImage(image.id)
-    // Actualiza la lista quitando la imagen eliminada
-    setImages((prevImages) => prevImages.filter((img) => img.id !== image.id))
-        loadReports()
-    loadProject()
-  } catch (error) {
-    alert("Error al eliminar la imagen. Intenta de nuevo.")
-    console.error(error)
+  const handleDeleteImage = async (image: any) => {
+    try {
+      await deleteImage(image.id)
+      // Actualiza la lista quitando la imagen eliminada
+      setImages((prevImages) => prevImages.filter((img) => img.id !== image.id))
+      loadReports()
+      loadProject()
+    } catch (error) {
+      alert("Error al eliminar la imagen. Intenta de nuevo.")
+      console.error(error)
+    }
   }
-}
 
   if (loading) {
     return (
