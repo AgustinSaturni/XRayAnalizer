@@ -126,7 +126,6 @@ const loadProject = async () => {
       await deleteImage(image.id)
       // Actualiza la lista quitando la imagen eliminada
       setImages((prevImages) => prevImages.filter((img) => img.id !== image.id))
-      loadReports()
       loadProject()
     } catch (error) {
       alert("Error al eliminar la imagen. Intenta de nuevo.")
