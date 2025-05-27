@@ -12,6 +12,7 @@ import { ArrowLeft, Download, Save, Loader2 } from "lucide-react"
 import { getProject } from "@/lib/projects"
 import { createReport } from "@/lib/reports"
 import { SaveReportDialog } from "@/components/save-report-dialog"
+import { getProjectImages } from "@/lib/images"
 
 export default function AnalyzePage() {
   const router = useRouter()
@@ -23,13 +24,7 @@ export default function AnalyzePage() {
   const [loading, setLoading] = useState(true)
   const [saveDialogOpen, setSaveDialogOpen] = useState(false)
   const params = useParams();
-
-  // Datos de ejemplo para imágenes
-  const images = [
-    "/placeholder.svg?height=600&width=400",
-    "/placeholder.svg?height=600&width=400",
-    "/placeholder.svg?height=600&width=400",
-  ]
+  const [images, setImages] = useState<string[]>([])
 
   // Datos de ejemplo para resultados de análisis
   const analysisResults = [
@@ -65,6 +60,11 @@ export default function AnalyzePage() {
         const id = params.id as string;
         const projectData = await getProject(id)
         setProject(projectData)
+        
+      // Obtener imágenes del proyecto
+        const imageList = await getProjectImages(id)
+        const urls = imageList.map((img: { url: string }) => img.url)
+        setImages(urls)
       } catch (error) {
         console.error("Error al cargar el proyecto:", error)
         toast({
@@ -183,13 +183,17 @@ export default function AnalyzePage() {
                 {isAnalyzing ? (
                   <Skeleton className="w-full h-full" />
                 ) : (
-                  <Image
-                    src={images[selectedImage] || "/placeholder.svg"}
-                    alt="Radiografía de pie"
-                    fill
-                    className="object-contain"
-                  />
-                )}
+                  images[selectedImage] ? (
+                    <Image
+                      src={images[selectedImage]}
+                      alt="Radiografía de pie"
+                      fill
+                      className="object-contain"
+                    />
+                  ) : (
+                    <Skeleton className="w-full h-full" />
+
+                ))}
 
                 {isAnalyzed && (
                   <div className="absolute inset-0">
@@ -209,16 +213,17 @@ export default function AnalyzePage() {
             </CardContent>
             <CardFooter className="flex justify-center">
               <div className="flex space-x-2">
-                {images.map((_, index) => (
-                  <Button
-                    key={index}
-                    variant={selectedImage === index ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setSelectedImage(index)}
-                  >
-                    Imagen {index + 1}
-                  </Button>
-                ))}
+            {images.map((_, index) => (
+              <Button
+                key={index}
+                variant={selectedImage === index ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSelectedImage(index)}
+              >
+                Imagen {index + 1}
+              </Button>
+            ))}
+
               </div>
             </CardFooter>
           </Card>
