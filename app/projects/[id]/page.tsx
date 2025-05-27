@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ArrowLeft, Upload, BarChart3, Trash2, Pencil, Loader2, Eye, Download } from "lucide-react"
 import { getProject } from "@/lib/projects"
 import { getReportsByProjectId } from "@/lib/reports"
-import { getProjectImages } from "@/lib/images"
+import { deleteImage, getProjectImages } from "@/lib/images"
 import { toast } from "@/components/ui/use-toast"
 import { Toaster } from "@/components/ui/toaster"
 import { DeleteProjectDialog } from "@/components/delete-project-dialog"
@@ -120,6 +120,19 @@ const loadProject = async () => {
     loadReports()
     loadProject()
   }
+
+const handleDeleteImage = async (image: any) => {
+  try {
+    await deleteImage(image.id)
+    // Actualiza la lista quitando la imagen eliminada
+    setImages((prevImages) => prevImages.filter((img) => img.id !== image.id))
+        loadReports()
+    loadProject()
+  } catch (error) {
+    alert("Error al eliminar la imagen. Intenta de nuevo.")
+    console.error(error)
+  }
+}
 
   if (loading) {
     return (
@@ -244,57 +257,67 @@ const loadProject = async () => {
               <TabsTrigger value="reports">Reportes</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="images">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Radiografías</CardTitle>
-                  <CardDescription>Radiografías subidas a este proyecto</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {loadingImages ? (
-                    <div className="flex justify-center items-center py-8">
-                      <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-                    </div>
-                  ) : project.imageCount === 0 ? (
-                    <div className="text-center py-8">
-                      <p className="text-muted-foreground mb-4">No hay radiografías en este proyecto</p>
-                      <Link href={`/upload?projectId=${project.id}`}>
-                        <Button>
-                          <Upload className="mr-2 h-4 w-4" />
-                          Subir Radiografías
-                        </Button>
-                      </Link>
-                    </div>
-                  ) : images.length === 0 ? (
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                      {Array.from({ length: project.imageCount }).map((_, index) => (
-                        <div key={index} className="relative aspect-[3/4] bg-muted rounded-md overflow-hidden">
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <span className="text-muted-foreground">Imagen {index + 1}</span>
-                          </div>
+          <TabsContent value="images">
+            <Card>
+              <CardHeader>
+                <CardTitle>Radiografías</CardTitle>
+                <CardDescription>Radiografías subidas a este proyecto</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {loadingImages ? (
+                  <div className="flex justify-center items-center py-8">
+                    <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+                  </div>
+                ) : project.imageCount === 0 ? (
+                  <div className="text-center py-8">
+                    <p className="text-muted-foreground mb-4">No hay radiografías en este proyecto</p>
+                    <Link href={`/upload?projectId=${project.id}`}>
+                      <Button>
+                        <Upload className="mr-2 h-4 w-4" />
+                        Subir Radiografías
+                      </Button>
+                    </Link>
+                  </div>
+                ) : images.length === 0 ? (
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {Array.from({ length: project.imageCount }).map((_, index) => (
+                      <div key={index} className="relative aspect-[3/4] bg-muted rounded-md overflow-hidden">
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-muted-foreground">Imagen {index + 1}</span>
                         </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                      {images.map((image, index) => (
-                        <div key={image.id} className="relative aspect-[3/4] bg-muted rounded-md overflow-hidden">
-                          <Image
-                            src={image.url || "/placeholder.svg"}
-                            alt={`Radiografía ${index + 1}`}
-                            fill
-                            className="object-contain"
-                          />
-                          <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-2 text-sm truncate">
-                            {image.name}
-                          </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {images.map((image, index) => (
+                      <div key={image.id} className="relative aspect-[3/4] bg-muted rounded-md overflow-hidden">
+                        <Image
+                          src={image.url || "/placeholder.svg"}
+                          alt={`Radiografía ${index + 1}`}
+                          fill
+                          className="object-contain"
+                        />
+                        {/* Botón eliminar en esquina superior derecha, rectangular con texto "Eliminar" */}
+                        <button
+                          onClick={() => handleDeleteImage(image)}
+                          className="absolute top-2 right-2 z-10 bg-black bg-opacity-50 hover:bg-opacity-75 text-white rounded px-2 py-0.5 flex items-center space-x-1 text-sm"
+                          aria-label={`Eliminar radiografía ${index + 1}`}
+                        >
+                          <Trash2 className="h-3.5 w-3.5 text-white" />
+                          <span>Eliminar</span>
+                        </button>
+
+                        <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-2 text-sm truncate">
+                          {image.name}
                         </div>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
 
             <TabsContent value="reports">
               <Card>
