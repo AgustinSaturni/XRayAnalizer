@@ -20,7 +20,7 @@ export default function NewProjectPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
-    patientId: "",
+    patient_id: "",
     description: "",
   })
 
@@ -35,7 +35,7 @@ export default function NewProjectPage() {
 
     try {
       // Validación básica
-      if (!formData.name.trim() || !formData.patientId.trim()) {
+      if (!formData.name.trim() || !formData.patient_id.trim()) {
         toast({
           title: "Error de validación",
           description: "El nombre del proyecto y el ID del paciente son obligatorios.",
@@ -111,14 +111,14 @@ export default function NewProjectPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="patientId">
+              <Label htmlFor="patient_id">
                 ID del Paciente <span className="text-destructive">*</span>
               </Label>
               <Input
-                id="patientId"
-                name="patientId"
+                id="patient_id"
+                name="patient_id"
                 placeholder="Ej: PAC-001"
-                value={formData.patientId}
+                value={formData.patient_id}
                 onChange={handleChange}
                 required
               />

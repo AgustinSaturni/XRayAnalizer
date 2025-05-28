@@ -6,7 +6,7 @@ let projects: any[] = [
   {
     id: "1",
     name: "Paciente A - Evaluación Inicial",
-    patientId: "PAC-001",
+    patient_id: "PAC-001",
     date: "15/04/2025",
     description: "Evaluación inicial del paciente A",
     imageCount: 3,
@@ -15,7 +15,7 @@ let projects: any[] = [
   {
     id: "2",
     name: "Paciente B - Seguimiento",
-    patientId: "PAC-002",
+    patient_id: "PAC-002",
     date: "10/04/2025",
     description: "Seguimiento del paciente B",
     imageCount: 2,
@@ -24,7 +24,7 @@ let projects: any[] = [
   {
     id: "3",
     name: "Paciente C - Post-operatorio",
-    patientId: "PAC-003",
+    patient_id: "PAC-003",
     date: "05/04/2025",
     description: "Evaluación post-operatoria del paciente C",
     imageCount: 4,

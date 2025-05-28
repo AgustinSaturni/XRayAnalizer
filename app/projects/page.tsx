@@ -49,7 +49,7 @@ export default function ProjectsPage() {
       const filtered = projects.filter(
         (project) =>
           project.name.toLowerCase().includes(normalizedSearchTerm) ||
-          project.patientId.toLowerCase().includes(normalizedSearchTerm),
+          project.patient_id.toLowerCase().includes(normalizedSearchTerm),
       )
       setFilteredProjects(filtered)
     }
@@ -162,7 +162,7 @@ export default function ProjectsPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="flex justify-between text-sm">
-                    <span>ID: {project.patientId}</span>
+                    <span>ID: {project.patient_id}</span>
                     <span>{project.imageCount} radiografías</span>
                   </div>
                 </CardContent>
