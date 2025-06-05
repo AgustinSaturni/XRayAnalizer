@@ -60,9 +60,12 @@ export default function NewProjectPage() {
         title: "Proyecto creado",
         description: `El proyecto "${formData.name}" ha sido creado exitosamente.`,
       })
-
+      const encoded = projectId;
+      const decoded = decodeURIComponent(encoded); 
+      const cleaned = decoded.replace(/^"|"$/g, ''); 
+      const number = Number(cleaned); 
       // Redirigir a la página del proyecto
-      router.push(`/projects/${projectId}`)
+      router.push(`/projects/${number}`)
     } catch (error) {
       console.error("Error al crear el proyecto:", error)
       toast({

@@ -61,7 +61,7 @@ export default function ReportsPage() {
         (report) =>
           (report.name && report.name.toLowerCase().includes(normalizedSearchTerm)) ||
           report.projectName.toLowerCase().includes(normalizedSearchTerm) ||
-          report.patient_id.toLowerCase().includes(normalizedSearchTerm) ||
+          report.patientId.toLowerCase().includes(normalizedSearchTerm) ||
           report.date.includes(normalizedSearchTerm) ||
           String(report.id).includes(normalizedSearchTerm),
       )
@@ -176,7 +176,7 @@ export default function ReportsPage() {
                   <TableRow key={report.id}>
                     <TableCell className="text-center font-medium">{report.name || `Reporte #${report.id}`}</TableCell>
                     <TableCell className="text-center">{report.projectName}</TableCell>
-                    <TableCell className="text-center">{report.patient_id}</TableCell>
+                    <TableCell className="text-center">{report.patientId}</TableCell>
                     <TableCell className="text-center">{report.date}</TableCell>
                     <TableCell className="text-center">{report.imageCount}</TableCell>
                     <TableCell className="text-center">

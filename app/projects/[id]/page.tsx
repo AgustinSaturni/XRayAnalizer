@@ -74,12 +74,16 @@ const loadProject = async () => {
   const loadImages = async () => {
     setLoadingImages(true)
     try {
-      const id = params.id as string
-      const imagesData = await getProjectImages(id)
+    const id = params.id as string; 
+    const encoded = id;
+    const decoded = decodeURIComponent(encoded); 
+    const cleaned = decoded.replace(/^"|"$/g, ''); 
+    const number = Number(cleaned); 
+    const imagesData = await getProjectImages(number);
       setImages(imagesData as any[])
     } catch (error) {
       console.error("Error al cargar las imágenes:", error)
-      toast({
+      toast({ 
         title: "Error",
         description: "No se pudieron cargar las imágenes. Por favor, inténtalo de nuevo.",
         variant: "destructive",

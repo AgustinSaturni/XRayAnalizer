@@ -23,7 +23,8 @@ export async function uploadImage(file: File, projectId: string): Promise<string
 }
 
 // Obtener todas las imágenes de un proyecto
-export async function getProjectImages(projectId: string) {
+export async function getProjectImages(projectId: number) {
+  
   const response = await fetch(`${BASE_URL}/project/${projectId}`)
 
   if (!response.ok) {

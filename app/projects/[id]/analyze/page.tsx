@@ -110,13 +110,13 @@ export default function AnalyzePage() {
       const reportData = {
         projectId: project.id,
         projectName: project.name,
-        patient_id: project.patient_id,
+        patientId: project.patientId,
         name: formData.name,
         imageCount: 1, // Solo guardamos la imagen seleccionada
         angles: analysisResults[selectedImage].angles,
         notes:
           formData.notes ||
-          `Análisis de radiografía para el paciente ${project.patient_id}. Imagen ${selectedImage + 1}.`,
+          `Análisis de radiografía para el paciente ${project.patientId}. Imagen ${selectedImage + 1}.`,
       }
 
       // Guardamos el reporte
@@ -281,7 +281,7 @@ export default function AnalyzePage() {
         onOpenChange={setSaveDialogOpen}
         onSave={saveReport}
         isSaving={isSaving}
-        defaultName={project ? `Análisis - ${project.patient_id} - Imagen ${selectedImage + 1}` : ""}
+        defaultName={project ? `Análisis - ${project.patientId} - Imagen ${selectedImage + 1}` : ""}
       />
 
       <Toaster />

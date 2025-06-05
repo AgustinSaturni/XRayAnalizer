@@ -143,7 +143,7 @@ export default function UploadPage() {
             <CardTitle>Subir Radiografías</CardTitle>
             <CardDescription>
               Proyecto: <span className="font-medium">{project.name}</span> - Paciente:{" "}
-              <span className="font-medium">{project.patient_id}</span>
+              <span className="font-medium">{project.patientId}</span>
             </CardDescription>
           </CardHeader>
           <CardContent>

@@ -20,7 +20,7 @@ export default function NewProjectPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
-    patient_id: "",
+    patientId: "",
     description: "",
   })
 
@@ -35,7 +35,7 @@ export default function NewProjectPage() {
 
     try {
       // Validación básica
-      if (!formData.name.trim() || !formData.patient_id.trim()) {
+      if (!formData.name.trim() || !formData.patientId.trim()) {
         toast({
           title: "Error de validación",
           description: "El nombre del proyecto y el ID del paciente son obligatorios.",
@@ -62,8 +62,12 @@ export default function NewProjectPage() {
         description: `El proyecto "${formData.name}" ha sido creado exitosamente.`,
       })
 
+      const encoded = projectId;
+      const decoded = decodeURIComponent(encoded); 
+      const cleaned = decoded.replace(/^"|"$/g, ''); 
+      const number = Number(cleaned); 
       // Redirigir a la página del proyecto creado
-      router.push(`/projects/${projectId}`)
+      router.push(`/projects/${number}`)
     } catch (error) {
       console.error("Error al crear el proyecto:", error)
       toast({
@@ -111,14 +115,14 @@ export default function NewProjectPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="patient_id">
+              <Label htmlFor="patientId">
                 ID del Paciente <span className="text-destructive">*</span>
               </Label>
               <Input
-                id="patient_id"
-                name="patient_id"
+                id="patientId"
+                name="patientId"
                 placeholder="Ej: PAC-001"
-                value={formData.patient_id}
+                value={formData.patientId}
                 onChange={handleChange}
                 required
               />

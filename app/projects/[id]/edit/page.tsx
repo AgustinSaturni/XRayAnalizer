@@ -33,7 +33,7 @@ export default function EditProjectPage() {
         const project = await getProject(id)
         setFormData({
           name: project.name,
-          patientId: project.patient_id,
+          patientId: project.patientId,
           description: project.description || "",
         })
       } catch (error) {

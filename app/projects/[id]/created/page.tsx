@@ -91,7 +91,7 @@ export default function ProjectCreatedPage({ params }: { params: { id: string } 
                 <span className="font-medium">ID:</span> {project.id}
               </li>
               <li>
-                <span className="font-medium">Paciente:</span> {project.patient_id}
+                <span className="font-medium">Paciente:</span> {project.patientId}
               </li>
               {project.description && (
                 <li>

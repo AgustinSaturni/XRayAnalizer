@@ -160,7 +160,7 @@ export default function ReportDetailPage() {
                 <div>{report.projectName}</div>
 
                 <div className="font-medium">ID Paciente:</div>
-                <div>{report.patient_id}</div>
+                <div>{report.patientId}</div>
 
                 <div className="font-medium">Fecha:</div>
                 <div>{report.date}</div>
