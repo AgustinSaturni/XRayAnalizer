@@ -7,7 +7,7 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ArrowLeft, Upload, BarChart3, Trash2, Pencil, Loader2, Eye, Download } from "lucide-react"
+import { ArrowLeft, Upload, BarChart3, Trash2, Pencil, Loader2, Eye, Download, X } from "lucide-react"
 import { getProject } from "@/lib/projects"
 import { getReportsByProjectId } from "@/lib/reports"
 import { deleteImage, getProjectImages } from "@/lib/images"
@@ -15,6 +15,7 @@ import { toast } from "@/components/ui/use-toast"
 import { Toaster } from "@/components/ui/toaster"
 import { DeleteProjectDialog } from "@/components/delete-project-dialog"
 import { DeleteReportDialog } from "@/components/delete-report-dialog"
+import { DeleteImageDialog } from "@/components/delete-image-dialog"
 
 export default function ProjectDetailPage() {
   const router = useRouter()
@@ -28,7 +29,8 @@ export default function ProjectDetailPage() {
   const [deleteReportDialogOpen, setDeleteReportDialogOpen] = useState(false)
   const [reportToDelete, setReportToDelete] = useState<any>(null)
   const [activeTab, setActiveTab] = useState("images")
-
+  const [imageToDelete, setImageToDelete] = useState<any>(null)
+  const [deleteImageDialogOpen, setDeleteImageDialogOpen] = useState(false)
   const params = useParams()
 
 const loadProject = async () => {
@@ -36,7 +38,6 @@ const loadProject = async () => {
     const rawId = params.id as string;
     const decodedId = decodeURIComponent(rawId);
     const id = decodedId.replace(/^"|"$/g, ""); // quita comillas
-    console.log("Cargando proyecto con ID:", id);
     const projectData = await getProject(id);
     console.log("Proyecto cargado:", projectData);
     setProject(projectData);
@@ -114,6 +115,12 @@ const loadProject = async () => {
     setDeleteDialogOpen(true)
   }
 
+    const handleDeleteImageClick = (image: any) => {
+      setImageToDelete(image)
+      setDeleteImageDialogOpen(true)
+  }
+
+
   const handleDeleteReportClick = (report: any) => {
     setReportToDelete(report)
     setDeleteReportDialogOpen(true)
@@ -135,6 +142,12 @@ const loadProject = async () => {
       alert("Error al eliminar la imagen. Intenta de nuevo.")
       console.error(error)
     }
+  }
+
+    const handleImageDeleted = () => {
+    // Recargar las imágenes y el proyecto después de eliminar una imagen
+    loadImages()
+    loadProject()
   }
 
   if (loading) {
@@ -267,58 +280,62 @@ const loadProject = async () => {
                 <CardDescription>Radiografías subidas a este proyecto</CardDescription>
               </CardHeader>
               <CardContent>
-                {loadingImages ? (
-                  <div className="flex justify-center items-center py-8">
-                    <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-                  </div>
-                ) : project.imageCount === 0 ? (
-                  <div className="text-center py-8">
-                    <p className="text-muted-foreground mb-4">No hay radiografías en este proyecto</p>
-                    <Link href={`/upload?projectId=${project.id}`}>
-                      <Button>
-                        <Upload className="mr-2 h-4 w-4" />
-                        Subir Radiografías
-                      </Button>
-                    </Link>
-                  </div>
-                ) : images.length === 0 ? (
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {Array.from({ length: project.imageCount }).map((_, index) => (
-                      <div key={index} className="relative aspect-[3/4] bg-muted rounded-md overflow-hidden">
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <span className="text-muted-foreground">Imagen {index + 1}</span>
+                  {loadingImages ? (
+                    <div className="flex justify-center items-center py-8">
+                      <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+                    </div>
+                  ) : project.imageCount === 0 ? (
+                    <div className="text-center py-8">
+                      <p className="text-muted-foreground mb-4">No hay radiografías en este proyecto</p>
+                      <Link href={`/upload?projectId=${project.id}`}>
+                        <Button>
+                          <Upload className="mr-2 h-4 w-4" />
+                          Subir Radiografías
+                        </Button>
+                      </Link>
+                    </div>
+                  ) : images.length === 0 ? (
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                      {Array.from({ length: project.imageCount }).map((_, index) => (
+                        <div key={index} className="relative aspect-[3/4] bg-muted rounded-md overflow-hidden">
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <span className="text-muted-foreground">Imagen {index + 1}</span>
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {images.map((image, index) => (
-                      <div key={image.id} className="relative aspect-[3/4] bg-muted rounded-md overflow-hidden">
-                        <Image
-                          src={image.url || "/placeholder.svg"}
-                          alt={`Radiografía ${index + 1}`}
-                          fill
-                          className="object-contain"
-                        />
-                        {/* Botón eliminar en esquina superior derecha, rectangular con texto "Eliminar" */}
-                        <button
-                          onClick={() => handleDeleteImage(image)}
-                          className="absolute top-2 right-2 z-10 bg-black bg-opacity-50 hover:bg-opacity-75 text-white rounded px-2 py-0.5 flex items-center space-x-1 text-sm"
-                          aria-label={`Eliminar radiografía ${index + 1}`}
-                        >
-                          <Trash2 className="h-3.5 w-3.5 text-white" />
-                          <span>Eliminar</span>
-                        </button>
-
-                        <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-2 text-sm truncate">
-                          {image.name}
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                      {images.map((image, index) => (
+                        <div key={image.id} className="relative group">
+                          <div className="relative aspect-[3/4] bg-muted rounded-md overflow-hidden">
+                            <Image
+                              src={image.url || "/placeholder.svg"}
+                              alt={`Radiografía ${index + 1}`}
+                              fill
+                              className="object-contain"
+                            />
+                            <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-2 text-sm truncate">
+                              {image.name}
+                            </div>
+                            {/* Botón de eliminar que aparece al hacer hover */}
+                            <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <Button
+                                variant="destructive"
+                                size="icon"
+                                className="h-8 w-8"
+                                onClick={() => handleDeleteImageClick(image)}
+                                title="Eliminar imagen"
+                              >
+                                <X className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
             </Card>
           </TabsContent>
 
@@ -407,6 +424,16 @@ const loadProject = async () => {
         />
       )}
 
+      {/* Diálogo de confirmación para eliminar imagen */}
+      {imageToDelete && (
+        <DeleteImageDialog
+          image={{ id: imageToDelete.id, name: imageToDelete.name }}
+          open={deleteImageDialogOpen}
+          onOpenChange={setDeleteImageDialogOpen}
+          onDeleted={handleImageDeleted}
+        />
+      )}
+      
       <Toaster />
     </div>
   )
