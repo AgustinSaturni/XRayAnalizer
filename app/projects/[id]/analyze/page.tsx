@@ -109,7 +109,7 @@ export default function AnalyzePage() {
       // Preparamos los datos del reporte
       const reportData = {
         projectId: project.id,
-        projectName: project.name,
+        date: new Date().toISOString().slice(0, 10),  // <-- fecha actual
         patientId: project.patientId,
         name: formData.name,
         imageCount: 1, // Solo guardamos la imagen seleccionada
