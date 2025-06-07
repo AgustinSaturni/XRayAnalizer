@@ -17,3 +17,13 @@ Este portal tiene como objetivo brindar soporte a profesionales de la salud para
    ```bash
    git clone <URL-del-repo>
    cd XRayAnalizer
+
+2. Instalar las dependencias::
+
+   ```bash
+   npm i
+
+3. Instalar las dependencias::
+
+   ```bash
+   npm run dev
