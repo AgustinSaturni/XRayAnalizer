@@ -28,10 +28,16 @@ Este portal tiene como objetivo brindar soporte a profesionales de la salud para
    ```bash
    npm run dev
 
+4. (OPCIONAL) Usar back-end local:
+
+   1. Clonar el back-end (https://github.com/AgustinSaturni/xrayanalizer-back-end)
+   2. Levantarlo localmente siguiendo las instrucciones.
+   3. Modificar en el codigo del front-end el parametro BASE_URL para que apunte al localhost que nos da el back-end al levantarlo.
+
 ## 🛠️ Arquitectura
 
 - **Frontend**: Aplicación web construida con React (utilizando Vite o Next.js), desplegada en [Vercel](https://vercel.com).
-- **Backend**: API desarrollada en Python, desplegada en [Render](https://render.com).
+- **Backend**: API desarrollada en Python, desplegada en [Render](https://xrayanalizer-back-end.onrender.com/docs#/).
 - **Comunicación**: El frontend se comunica con el backend a través de peticiones HTTP.
 
 ---
