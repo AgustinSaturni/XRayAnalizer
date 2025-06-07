@@ -1,40 +1,11 @@
 // Añadir al inicio del archivo para depuración
 console.log("Módulo projects.ts cargado")
 
-// Simulación de una base de datos en memoria
-let projects: any[] = [
-  {
-    id: "1",
-    name: "Paciente A - Evaluación Inicial",
-    patientId: "PAC-001",
-    date: "15/04/2025",
-    description: "Evaluación inicial del paciente A",
-    imageCount: 3,
-    reportCount: 2,
-  },
-  {
-    id: "2",
-    name: "Paciente B - Seguimiento",
-    patientId: "PAC-002",
-    date: "10/04/2025",
-    description: "Seguimiento del paciente B",
-    imageCount: 2,
-    reportCount: 1,
-  },
-  {
-    id: "3",
-    name: "Paciente C - Post-operatorio",
-    patientId: "PAC-003",
-    date: "05/04/2025",
-    description: "Evaluación post-operatoria del paciente C",
-    imageCount: 4,
-    reportCount: 3,
-  },
-]
+const BASE_URL = "https://xrayanalizer-back-end.onrender.com/projects"
 
 // Función para obtener todos los proyectos desde la API
 export async function getProjects() {
-  const response = await fetch("http://127.0.0.1:8000/projects");
+  const response = await fetch(BASE_URL);
   
   if (!response.ok) {
     throw new Error("Error al obtener los proyectos");
@@ -44,13 +15,12 @@ export async function getProjects() {
   return data;
 }
 
-
 // Función para obtener un proyecto por ID desde la API
 export async function getProject(id: string) {
   console.log("Buscando proyecto con ID:", id);
 
   try {
-    const response = await fetch(`http://127.0.0.1:8000/projects/${id}`);
+    const response = await fetch(`${BASE_URL}/${id}`);
 
     if (!response.ok) {
       throw new Error("Proyecto no encontrado");
@@ -64,12 +34,12 @@ export async function getProject(id: string) {
     throw error;
   }
 }
+
 // Función para crear un nuevo proyecto usando la API real
 export async function createProject(projectData: any): Promise<string> {
   console.log("Creando nuevo proyecto con datos:", projectData);
-
   try {
-    const response = await fetch("http://127.0.0.1:8000/projects", {
+    const response = await fetch(BASE_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -94,7 +64,7 @@ export async function updateProject(id: string, projectData: any) {
   console.log("Actualizando proyecto con ID:", id, "Datos:", projectData)
 
   try {
-    const response = await fetch(`http://127.0.0.1:8000/projects/${id}`, {
+    const response = await fetch(`${BASE_URL}/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -117,7 +87,7 @@ export async function deleteProject(id: string) {
   console.log("Eliminando proyecto con ID:", id)
 
   try {
-    const response = await fetch(`http://127.0.0.1:8000/projects/${id}`, {
+    const response = await fetch(`${BASE_URL}/${id}`, {
       method: "DELETE",
     })
 

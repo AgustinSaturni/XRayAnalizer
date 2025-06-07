@@ -1,7 +1,7 @@
 // Simulación de una base de datos en memoria para imágenes
 let images: any[] = []
 
-const BASE_URL = "http://127.0.0.1:8000/images"
+const BASE_URL = "https://xrayanalizer-back-end.onrender.com/images"
 
 // Subir una imagen real al backend
 export async function uploadImage(file: File, projectId: string): Promise<string> {
