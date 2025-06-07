@@ -13,6 +13,8 @@ import { getProject } from "@/lib/projects"
 import { createReport } from "@/lib/reports"
 import { SaveReportDialog } from "@/components/save-report-dialog"
 import { getProjectImages } from "@/lib/images"
+import { FeatureNotImplementedDialog } from "@/components/feature-not-implemented-dialog"
+
 
 export default function AnalyzePage() {
   const router = useRouter()
@@ -25,6 +27,7 @@ export default function AnalyzePage() {
   const [saveDialogOpen, setSaveDialogOpen] = useState(false)
   const params = useParams();
   const [images, setImages] = useState<string[]>([])
+  const [featureDialogOpen, setFeatureDialogOpen] = useState(false)
 
   // Datos de ejemplo para resultados de análisis
   const analysisResults = [
@@ -58,11 +61,14 @@ export default function AnalyzePage() {
     const loadProject = async () => {
       try {
         const id = params.id as string;
+        const encoded = id;
+        const decoded = decodeURIComponent(encoded); 
+        const cleaned = decoded.replace(/^"|"$/g, ''); 
+        const number = Number(cleaned); 
         const projectData = await getProject(id)
         setProject(projectData)
-        
       // Obtener imágenes del proyecto
-        const imageList = await getProjectImages(id)
+        const imageList = await getProjectImages(number)
         const urls = imageList.map((img: { url: string }) => img.url)
         setImages(urls)
       } catch (error) {
@@ -144,12 +150,9 @@ export default function AnalyzePage() {
     }
   }
 
+
   const downloadReport = () => {
-    // Aquí iría la lógica para descargar el reporte en PDF
-    toast({
-      title: "Descargando reporte",
-      description: "El reporte se está descargando.",
-    })
+    setFeatureDialogOpen(true)
   }
 
   if (loading) {
@@ -283,6 +286,9 @@ export default function AnalyzePage() {
         isSaving={isSaving}
         defaultName={project ? `Análisis - ${project.patientId} - Imagen ${selectedImage + 1}` : ""}
       />
+            {/* Diálogo de funcionalidad no implementada */}
+      <FeatureNotImplementedDialog open={featureDialogOpen} onOpenChange={setFeatureDialogOpen} />
+
 
       <Toaster />
     </div>

@@ -13,6 +13,8 @@ import { Toaster } from "@/components/ui/toaster"
 import { getReportById, updateReport } from "@/lib/reports"
 import { DeleteReportDialog } from "@/components/delete-report-dialog"
 import { EditReportDialog } from "@/components/edit-report-dialog"
+import { FeatureNotImplementedDialog } from "@/components/feature-not-implemented-dialog"
+
 
 export default function ReportDetailPage() {
   const router = useRouter()
@@ -22,7 +24,8 @@ export default function ReportDetailPage() {
   const [editDialogOpen, setEditDialogOpen] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const params = useParams();
-  
+  const [featureDialogOpen, setFeatureDialogOpen] = useState(false)
+
   const loadReport = async () => {
     try {
       const id = params.id as string;
@@ -53,6 +56,11 @@ export default function ReportDetailPage() {
     setEditDialogOpen(true)
   }
 
+    const handleDownloadReport = () => {
+    setFeatureDialogOpen(true)
+  }
+
+  
   const handleSaveEdit = async (formData: { name: string; notes: string }) => {
     if (!report) return
 
@@ -137,7 +145,7 @@ export default function ReportDetailPage() {
             <Pencil className="mr-2 h-4 w-4" />
             Editar
           </Button>
-          <Button>
+          <Button onClick={handleDownloadReport}>
             <Download className="mr-2 h-4 w-4" />
             Descargar PDF
           </Button>
@@ -248,6 +256,9 @@ export default function ReportDetailPage() {
         onSave={handleSaveEdit}
         isSaving={isSaving}
       />
+
+      <FeatureNotImplementedDialog open={featureDialogOpen} onOpenChange={setFeatureDialogOpen} />
+
 
       <Toaster />
     </div>

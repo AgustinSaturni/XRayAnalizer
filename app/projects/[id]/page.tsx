@@ -16,6 +16,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { DeleteProjectDialog } from "@/components/delete-project-dialog"
 import { DeleteReportDialog } from "@/components/delete-report-dialog"
 import { DeleteImageDialog } from "@/components/delete-image-dialog"
+import { FeatureNotImplementedDialog } from "@/components/feature-not-implemented-dialog"
 
 export default function ProjectDetailPage() {
   const router = useRouter()
@@ -31,6 +32,7 @@ export default function ProjectDetailPage() {
   const [activeTab, setActiveTab] = useState("images")
   const [imageToDelete, setImageToDelete] = useState<any>(null)
   const [deleteImageDialogOpen, setDeleteImageDialogOpen] = useState(false)
+  const [featureDialogOpen, setFeatureDialogOpen] = useState(false)
   const params = useParams()
 
 const loadProject = async () => {
@@ -132,17 +134,11 @@ const loadProject = async () => {
     loadProject()
   }
 
-  const handleDeleteImage = async (image: any) => {
-    try {
-      await deleteImage(image.id)
-      // Actualiza la lista quitando la imagen eliminada
-      setImages((prevImages) => prevImages.filter((img) => img.id !== image.id))
-      loadProject()
-    } catch (error) {
-      alert("Error al eliminar la imagen. Intenta de nuevo.")
-      console.error(error)
-    }
+
+  const handleDownloadReport = () => {
+    setFeatureDialogOpen(true)
   }
+
 
     const handleImageDeleted = () => {
     // Recargar las imágenes y el proyecto después de eliminar una imagen
@@ -379,7 +375,7 @@ const loadProject = async () => {
                               </Button>
                             </Link>
                             <div className="space-x-2">
-                              <Button variant="outline" size="sm">
+                              <Button variant="outline" size="sm" onClick={handleDownloadReport}>
                                 <Download className="mr-2 h-4 w-4" />
                                 Descargar
                               </Button>
@@ -433,7 +429,9 @@ const loadProject = async () => {
           onDeleted={handleImageDeleted}
         />
       )}
-      
+            {/* Diálogo de funcionalidad no implementada */}
+      <FeatureNotImplementedDialog open={featureDialogOpen} onOpenChange={setFeatureDialogOpen} />
+
       <Toaster />
     </div>
   )

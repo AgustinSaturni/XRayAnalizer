@@ -12,6 +12,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { getReports } from "@/lib/reports"
 import { DeleteReportDialog } from "@/components/delete-report-dialog"
 import { Pagination } from "@/components/pagination"
+import { FeatureNotImplementedDialog } from "@/components/feature-not-implemented-dialog"
 
 // Número de reportes por página
 const ITEMS_PER_PAGE = 5
@@ -23,7 +24,7 @@ export default function ReportsPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [reportToDelete, setReportToDelete] = useState<any>(null)
-
+  const [featureDialogOpen, setFeatureDialogOpen] = useState(false)
   // Estados para la paginación
   const [currentPage, setCurrentPage] = useState(1)
   const [paginatedReports, setPaginatedReports] = useState<any[]>([])
@@ -113,6 +114,11 @@ export default function ReportsPage() {
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
+  const handleDownloadReport = () => {
+    setFeatureDialogOpen(true)
+  }
+
+
   return (
     <div className="container mx-auto py-10">
       <h1 className="text-3xl font-bold mb-6">Reportes de Análisis</h1>
@@ -186,7 +192,7 @@ export default function ReportsPage() {
                             <Eye className="h-4 w-4" />
                           </Button>
                         </Link>
-                        <Button variant="outline" size="icon">
+                        <Button variant="outline" size="icon" onClick={handleDownloadReport}>
                           <Download className="h-4 w-4" />
                         </Button>
                         <Button
@@ -224,6 +230,7 @@ export default function ReportsPage() {
           onDeleted={handleReportDeleted}
         />
       )}
+      <FeatureNotImplementedDialog open={featureDialogOpen} onOpenChange={setFeatureDialogOpen} />
 
       <Toaster />
     </div>
