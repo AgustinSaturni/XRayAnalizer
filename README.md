@@ -41,3 +41,10 @@ Este portal tiene como objetivo brindar soporte a profesionales de la salud para
 - Este portal es un **MVP** (Producto Mínimo Viable) del producto final.
 - La aplicación se conecta a un backend implementado en Python.
 - El análisis de ángulos con inteligencia artificial **aún no está implementado** y será incorporado en futuras versiones.
+
+---
+
+## 📞 Contacto
+
+- **Mail**: a.saturni2021@gmail.com
+- **LinkedIn**: https://www.linkedin.com/in/agustin-saturni
